@@ -49,7 +49,7 @@
 	    Dispatcher = __webpack_require__(166),
 	    Organ = __webpack_require__(170);
 	
-	__webpack_require__(202);
+	__webpack_require__(203);
 	
 	document.addEventListener("DOMContentLoaded", function () {
 	    var content = document.querySelector('#content');
@@ -20333,19 +20333,29 @@
 	var React = __webpack_require__(160),
 	    OrganKey = __webpack_require__(171),
 	    Tones = __webpack_require__(192),
-	    Recorder = __webpack_require__(193),
-	    JukeBox = __webpack_require__(200);
+	    Recorder = __webpack_require__(194),
+	    JukeBox = __webpack_require__(201);
 	
 	var Organ = React.createClass({
 	  displayName: 'Organ',
 	
+	  getInitialState: function () {
+	    return { showMap: false };
+	  },
+	
 	  organKeys: function () {
+	    var organ = this;
 	    return Object.keys(Tones).map(function (tone) {
-	      return React.createElement(OrganKey, { key: tone, noteName: tone });
+	      return React.createElement(OrganKey, { key: tone, noteName: tone, showMap: organ.state.showMap });
 	    });
 	  },
 	
+	  toggleMaps: function (event) {
+	    this.setState({ showMap: !this.state.showMap });
+	  },
+	
 	  render: function () {
+	    var toggleText = this.state.showMap ? 'hide keymap' : 'show keymap';
 	    return React.createElement(
 	      'div',
 	      { className: 'main' },
@@ -20359,6 +20369,11 @@
 	        { className: 'organ' },
 	        this.organKeys()
 	      ),
+	      React.createElement('input', {
+	        type: 'submit',
+	        value: toggleText,
+	        className: 'btn',
+	        onClick: this.toggleMaps }),
 	      React.createElement(
 	        'div',
 	        { className: 'tracks' },
@@ -20379,7 +20394,8 @@
 	    classNames = __webpack_require__(172),
 	    KeyStore = __webpack_require__(173),
 	    Note = __webpack_require__(191),
-	    Tones = __webpack_require__(192);
+	    Tones = __webpack_require__(192),
+	    KeyMapping = __webpack_require__(193);
 	
 	var OrganKey = React.createClass({
 	  displayName: 'OrganKey',
@@ -20416,14 +20432,17 @@
 	      'sharp': this.props.noteName.endsWith('S')
 	    });
 	
+	    var keyMap;
+	    if (this.props.showMap) keyMap = React.createElement(
+	      'div',
+	      { className: 'text' },
+	      KeyMapping[this.props.noteName]
+	    );else keyMap = '';
+	
 	    return React.createElement(
 	      'div',
 	      { className: classes },
-	      React.createElement(
-	        'div',
-	        { className: 'text' },
-	        keyName
-	      )
+	      keyMap
 	    );
 	  }
 	});
@@ -27047,15 +27066,34 @@
 
 /***/ },
 /* 193 */
+/***/ function(module, exports) {
+
+	module.exports = {
+	  C4: 'A',
+	  C4S: 'W',
+	  D4: 'S',
+	  D4S: 'E',
+	  E4: 'D',
+	  F4: 'F',
+	  F4S: 'T',
+	  G4: 'G',
+	  G4S: 'Y',
+	  A4: 'H',
+	  A4S: 'U',
+	  B4: 'J'
+	};
+
+/***/ },
+/* 194 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(160),
 	    classNames = __webpack_require__(172),
 	    KeyStore = __webpack_require__(173),
-	    TrackStore = __webpack_require__(194),
-	    Track = __webpack_require__(195),
-	    TrackActions = __webpack_require__(197),
-	    TrackForm = __webpack_require__(198);
+	    TrackStore = __webpack_require__(195),
+	    Track = __webpack_require__(196),
+	    TrackActions = __webpack_require__(198),
+	    TrackForm = __webpack_require__(199);
 	
 	var Recorder = React.createClass({
 	  displayName: 'Recorder',
@@ -27158,12 +27196,12 @@
 	module.exports = Recorder;
 
 /***/ },
-/* 194 */
+/* 195 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(166),
 	    Store = __webpack_require__(174).Store,
-	    Track = __webpack_require__(195);
+	    Track = __webpack_require__(196);
 	
 	var TrackStore = new Store(Dispatcher);
 	
@@ -27216,10 +27254,10 @@
 	module.exports = TrackStore;
 
 /***/ },
-/* 195 */
+/* 196 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var KeyActions = __webpack_require__(196);
+	var KeyActions = __webpack_require__(197);
 	
 	var Track = function (attrs) {
 	  this.name = attrs.name;
@@ -27271,7 +27309,7 @@
 	module.exports = Track;
 
 /***/ },
-/* 196 */
+/* 197 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(166);
@@ -27302,7 +27340,7 @@
 	module.exports = KeyActions;
 
 /***/ },
-/* 197 */
+/* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var Dispatcher = __webpack_require__(166);
@@ -27332,13 +27370,13 @@
 	module.exports = TrackActions;
 
 /***/ },
-/* 198 */
+/* 199 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(160),
-	    TrackActions = __webpack_require__(197),
+	    TrackActions = __webpack_require__(198),
 	    classNames = __webpack_require__(172),
-	    TrackApiUtil = __webpack_require__(199);
+	    TrackApiUtil = __webpack_require__(200);
 	
 	var TrackForm = React.createClass({
 	  displayName: 'TrackForm',
@@ -27394,10 +27432,10 @@
 	module.exports = TrackForm;
 
 /***/ },
-/* 199 */
+/* 200 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var TrackActions = __webpack_require__(197);
+	var TrackActions = __webpack_require__(198);
 	
 	module.exports = {
 	  fetch: function () {
@@ -27432,14 +27470,14 @@
 	};
 
 /***/ },
-/* 200 */
+/* 201 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(160),
 	    classNames = __webpack_require__(172),
-	    TrackStore = __webpack_require__(194),
-	    TrackApiUtil = __webpack_require__(199),
-	    TrackPlayer = __webpack_require__(201);
+	    TrackStore = __webpack_require__(195),
+	    TrackApiUtil = __webpack_require__(200),
+	    TrackPlayer = __webpack_require__(202);
 	
 	var JukeBox = React.createClass({
 	  displayName: 'JukeBox',
@@ -27493,13 +27531,13 @@
 	module.exports = JukeBox;
 
 /***/ },
-/* 201 */
+/* 202 */
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(160),
 	    classNames = __webpack_require__(172),
-	    TrackActions = __webpack_require__(197),
-	    TrackApiUtil = __webpack_require__(199);
+	    TrackActions = __webpack_require__(198),
+	    TrackApiUtil = __webpack_require__(200);
 	
 	var TrackPlayer = React.createClass({
 	  displayName: 'TrackPlayer',
@@ -27543,11 +27581,11 @@
 	module.exports = TrackPlayer;
 
 /***/ },
-/* 202 */
+/* 203 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Mapping = __webpack_require__(203),
-	    KeyActions = __webpack_require__(196);
+	var Mapping = __webpack_require__(204),
+	    KeyActions = __webpack_require__(197);
 	
 	$(document).keydown(function (event) {
 	  KeyActions.keyDown(Mapping[event.which]);
@@ -27558,7 +27596,7 @@
 	});
 
 /***/ },
-/* 203 */
+/* 204 */
 /***/ function(module, exports) {
 
 	module.exports = {

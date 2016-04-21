@@ -2,7 +2,8 @@ var React = require('react'),
     classNames = require('classnames'),
     KeyStore = require('../stores/KeyStore'),
     Note = require('../util/Note'),
-    Tones = require('../constants/Tones');
+    Tones = require('../constants/Tones'),
+    KeyMapping = require('../constants/KeyMapping');
 
 var OrganKey = React.createClass({
   getInitialState: function () {
@@ -38,9 +39,15 @@ var OrganKey = React.createClass({
       'sharp': this.props.noteName.endsWith('S')
     });
 
+    var keyMap;
+    if (this.props.showMap)
+      keyMap = <div className='text'>{KeyMapping[this.props.noteName]}</div>;
+    else
+      keyMap = '';
+
     return (
       <div className={classes}>
-        <div className='text'>{keyName}</div>
+        {keyMap}
       </div>
     );
   }

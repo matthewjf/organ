@@ -90,9 +90,6 @@ form {
   text-align: center;
   background-color: $white-key;
   box-shadow: 0 1px 3px 0 hsla(0, 0%, 0%, .18);
-  .text {
-    left: 45%;
-  }
   &:first-child {
     border-left: $white-border;
   }
@@ -110,18 +107,15 @@ form {
   height: 225px;
   color: white;
   background-color: $black-key;
-  .text {
-    left: 30%;
-  }
 }
 
 .pressed {
-  background: linear-gradient(to bottom, $white-key, hsl(215, 100%, 90%));
+  background: linear-gradient(to bottom, $white-key, hsl(60, 100%, 85%));
   border-bottom: none;
 }
 
 .sharp.pressed {
-  background: linear-gradient(to bottom, $black-key, hsl(215, 40%, 28%));
+  background: linear-gradient(to bottom, $black-key, hsl(60, 40%, 50%));
   border-bottom: none;
 }
 
@@ -129,6 +123,7 @@ form {
 .text {
   position: absolute;
   bottom: 10px;
+  width: 100%;
 }
 
 .btn {
