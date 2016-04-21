@@ -1,0 +1,78 @@
+@import "bootstrap";
+
+$white-border: 1px solid hsl(0, 0%, 92%);
+$white-key: hsl(60, 100%, 97%);
+$black-border: 1px solid hsl(0, 0%, 18%);
+$black-key: hsl(0,0%,28%);
+$amount: 8%;
+
+body {
+  font-family: sans-serif;
+  color: hsl(0, 0%, 28%)
+}
+
+.organ {
+  display: flex;
+  flex-flow: row;
+  flex-wrap: nowrap;
+  height: 400px;
+  justify-content: center;
+  flex: 4;
+}
+
+.key {
+  display: inline-flex;
+  position: relative;
+  border-right: $white-border;
+  border-top: $white-border;
+  border-bottom: $white-border;
+  height: 100%;
+  width: 60px;
+  text-align: center;
+  background-color: $white-key;
+  box-shadow: 0 1px 3px 0 hsla(0, 0%, 0%, .18);
+  .text {
+    left: 45%;
+  }
+  &:first-child {
+    border-left: $white-border;
+  }
+}
+
+.sharp {
+  border-right: $black-border;
+  border-top: $black-border;
+  border-bottom: $black-border;
+  border: none;
+  z-index: 999;
+  margin-left: -20px;
+  width: 40px;
+  position: absolute;
+  height: 225px;
+  background-color: hsl(0,0%, 33%);
+  color: white;
+  background-color: $black-key;
+  .text {
+    left: 30%;
+  }
+}
+
+.pressed {
+  background: linear-gradient(to bottom, $white-key, hsl(215, 100%, 90%));
+  border-bottom: none;
+}
+
+.sharp.pressed {
+  background: linear-gradient(to bottom, $black-key, hsl(215, 40%, 28%));
+  border-bottom: none;
+}
+
+
+.text {
+  position: absolute;
+  bottom: 10px;
+}
+
+.btn {
+  margin: 0 5px;
+}

@@ -1,0 +1,28 @@
+development:
+  adapter: postgresql
+  encoding: unicode
+  database: demo_test_development
+  pool: 5
+  username:
+  password:
+  timeout: 5000
+  host: localhost
+
+test:
+  adapter: postgresql
+  encoding: unicode
+  database: demo_test_test
+  pool: 5
+  username:
+  password:
+  timeout: 5000
+  host: localhost
+
+production:
+  adapter: postgresql
+  encoding: utf8
+  database: demo_test_production
+  pool: 5
+  username:
+  password:
+  host: localhost
