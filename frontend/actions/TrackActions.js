@@ -12,7 +12,14 @@ var TrackActions = {
       actionType: 'REMOVETRACK',
       track: track
     });
+  },
+  setTracks: function(tracks){
+    Dispatcher.dispatch({
+      actionType: 'SETTRACKS',
+      tracks: tracks
+    });
   }
+
 };
 
 module.exports = TrackActions;

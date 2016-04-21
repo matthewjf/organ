@@ -17,10 +17,11 @@ var removeKey = function (key) {
 
 var setKeys = function (notes) {
   _keys = {};
-
-  notes.forEach(function(note) {
-    _keys[note] = true;
-  });
+  if (notes) {
+    notes.forEach(function(note) {
+      _keys[note] = true;
+    });
+  }
 
   KeyStore.__emitChange();
 };

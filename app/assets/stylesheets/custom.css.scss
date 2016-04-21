@@ -11,6 +11,16 @@ body {
   color: hsl(0, 0%, 28%)
 }
 
+h1 {
+  text-align: center;
+}
+
+.tracks {
+  width: 400px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .organ {
   display: flex;
   flex-flow: row;

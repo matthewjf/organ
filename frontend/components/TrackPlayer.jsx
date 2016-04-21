@@ -1,6 +1,7 @@
 var React = require('react'),
     classNames = require('classnames'),
-    TrackActions = require('../actions/TrackActions');
+    TrackActions = require('../actions/TrackActions'),
+    TrackApiUtil = require('../util/TrackApiUtil');
 
 var TrackPlayer = React.createClass({
 
@@ -9,7 +10,7 @@ var TrackPlayer = React.createClass({
   },
 
   handleDelete: function() {
-    TrackActions.removeTrack(this.props.track);
+    TrackApiUtil.destroy(this.props.track.id);
   },
 
   render: function () {

@@ -1,6 +1,7 @@
 var React = require('react'),
     classNames = require('classnames'),
     TrackStore = require('../stores/TrackStore'),
+    TrackApiUtil = require('../util/TrackApiUtil'),
     TrackPlayer = require('./TrackPlayer');
 
 var JukeBox = React.createClass({
@@ -15,6 +16,7 @@ var JukeBox = React.createClass({
   },
 
   componentDidMount: function() {
+    TrackApiUtil.fetch();
     this.jukeBoxListener = TrackStore.addListener(this._changed);
   },
 
@@ -25,8 +27,8 @@ var JukeBox = React.createClass({
   render: function () {
     var tracks = this.state.tracks.map(function(track){
       return (
-        <li key={track.startTime}>
-          <TrackPlayer key={track.startTime} track={track} />
+        <li key={track.id}>
+          <TrackPlayer key={track.id} track={track} />
         </li>
       );
     });

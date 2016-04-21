@@ -18,8 +18,10 @@ var Organ = React.createClass ({
         <div className='organ'>
           {this.organKeys()}
         </div>
-        <Recorder />
-        <JukeBox />
+        <div className='tracks'>
+          <Recorder />
+          <JukeBox />
+        </div>
       </div>
     );
   }

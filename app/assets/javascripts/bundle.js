@@ -20514,10 +20514,11 @@
 	
 	var setKeys = function (notes) {
 	  _keys = {};
-	
-	  notes.forEach(function (note) {
-	    _keys[note] = true;
-	  });
+	  if (notes) {
+	    notes.forEach(function (note) {
+	      _keys[note] = true;
+	    });
+	  }
 	
 	  KeyStore.__emitChange();
 	};
@@ -27043,8 +27044,12 @@
 	        { className: 'organ' },
 	        this.organKeys()
 	      ),
-	      React.createElement(Recorder, null),
-	      React.createElement(JukeBox, null)
+	      React.createElement(
+	        'div',
+	        { className: 'tracks' },
+	        React.createElement(Recorder, null),
+	        React.createElement(JukeBox, null)
+	      )
 	    );
 	  }
 	});
@@ -27210,21 +27215,34 @@
 	var Track = function (attrs) {
 	  this.name = attrs.name;
 	  this.roll = attrs.roll ? attrs.roll : [];
+	  this.id = attrs.id;
 	};
+	
+	// Track.prototype.makeRoll = function (obj) {
+	//   var result = [];
+	//   debugger;
+	//   for (var i = 0; i < Object.keys(obj).length; i++) {
+	//     if (!obj[i].notes) {obj[i].notes = [];}
+	//     result.push(obj[i]);
+	//   }
+	//   return result;
+	// };
 	
 	Track.prototype.startRecording = function () {
 	  this.startTime = Date.now();
 	  this.roll = [];
 	};
 	
+	Track.prototype.stopRecording = function () {
+	  var elapsed = Date.now() - this.startTime;
+	  var slice = { timeSlice: elapsed, notes: [] };
+	  this.roll.push(slice);
+	};
+	
 	Track.prototype.addNotes = function (notes) {
 	  var elapsed = Date.now() - this.startTime;
 	  var slice = { timeSlice: elapsed, notes: notes };
 	  this.roll.push(slice);
-	};
-	
-	Track.prototype.stopRecording = function () {
-	  this.addNotes([]);
 	};
 	
 	Track.prototype.play = function () {
@@ -27257,26 +27275,34 @@
 /* 198 */
 /***/ function(module, exports, __webpack_require__) {
 
-	var Dispatcher = __webpack_require__(1);
-	var Store = __webpack_require__(176).Store;
+	var Dispatcher = __webpack_require__(1),
+	    Store = __webpack_require__(176).Store,
+	    Track = __webpack_require__(197);
 	
 	var TrackStore = new Store(Dispatcher);
 	
 	var _tracks = [];
 	
-	var addTrack = function (track) {
+	var addTrack = function (trackData) {
+	  var track = new Track(trackData);
 	  _tracks.push(track);
 	  TrackStore.__emitChange();
 	};
 	
-	var addTracks = function (tracks) {
-	  console.log('track added');
-	  _tracks.push.apply(_tracks, tracks);
+	var setTracks = function (tracks) {
+	  tracks.forEach(function (trackData) {
+	    _tracks.push(new Track(trackData));
+	  });
+	
 	  TrackStore.__emitChange();
 	};
 	
 	var removeTrack = function (track) {
-	  var trackIdx = _tracks.indexOf(track);
+	  var trackIds = _tracks.map(function (t) {
+	    return t.id;
+	  });
+	  var trackIdx = trackIds.indexOf(track.id);
+	
 	  if (trackIdx > -1) {
 	    _tracks.splice(trackIdx, 1);
 	    TrackStore.__emitChange();
@@ -27294,6 +27320,9 @@
 	      break;
 	    case 'REMOVETRACK':
 	      removeTrack(payload.track);
+	      break;
+	    case 'SETTRACKS':
+	      setTracks(payload.tracks);
 	      break;
 	  }
 	};
@@ -27318,7 +27347,14 @@
 	      actionType: 'REMOVETRACK',
 	      track: track
 	    });
+	  },
+	  setTracks: function (tracks) {
+	    Dispatcher.dispatch({
+	      actionType: 'SETTRACKS',
+	      tracks: tracks
+	    });
 	  }
+	
 	};
 	
 	module.exports = TrackActions;
@@ -27330,6 +27366,7 @@
 	var React = __webpack_require__(165),
 	    classNames = __webpack_require__(195),
 	    TrackStore = __webpack_require__(198),
+	    TrackApiUtil = __webpack_require__(203),
 	    TrackPlayer = __webpack_require__(201);
 	
 	var JukeBox = React.createClass({
@@ -27346,6 +27383,7 @@
 	  },
 	
 	  componentDidMount: function () {
+	    TrackApiUtil.fetch();
 	    this.jukeBoxListener = TrackStore.addListener(this._changed);
 	  },
 	
@@ -27357,8 +27395,8 @@
 	    var tracks = this.state.tracks.map(function (track) {
 	      return React.createElement(
 	        'li',
-	        { key: track.startTime },
-	        React.createElement(TrackPlayer, { key: track.startTime, track: track })
+	        { key: track.id },
+	        React.createElement(TrackPlayer, { key: track.id, track: track })
 	      );
 	    });
 	
@@ -27388,7 +27426,8 @@
 
 	var React = __webpack_require__(165),
 	    classNames = __webpack_require__(195),
-	    TrackActions = __webpack_require__(199);
+	    TrackActions = __webpack_require__(199),
+	    TrackApiUtil = __webpack_require__(203);
 	
 	var TrackPlayer = React.createClass({
 	  displayName: 'TrackPlayer',
@@ -27399,7 +27438,7 @@
 	  },
 	
 	  handleDelete: function () {
-	    TrackActions.removeTrack(this.props.track);
+	    TrackApiUtil.destroy(this.props.track.id);
 	  },
 	
 	  render: function () {
@@ -27434,7 +27473,8 @@
 /***/ function(module, exports, __webpack_require__) {
 
 	var React = __webpack_require__(165),
-	    TrackActions = __webpack_require__(199);
+	    TrackActions = __webpack_require__(199),
+	    TrackApiUtil = __webpack_require__(203);
 	
 	var TrackForm = React.createClass({
 	  displayName: 'TrackForm',
@@ -27446,7 +27486,7 @@
 	  handleSave: function (event) {
 	    event.preventDefault();
 	    this.props.track.name = this.state.name;
-	    TrackActions.addTrack(this.props.track);
+	    TrackApiUtil.save(this.props.track);
 	    this.resetState();
 	    this.props.reset();
 	  },
@@ -27479,6 +27519,44 @@
 	});
 	
 	module.exports = TrackForm;
+
+/***/ },
+/* 203 */
+/***/ function(module, exports, __webpack_require__) {
+
+	var TrackActions = __webpack_require__(199);
+	
+	module.exports = {
+	  fetch: function () {
+	    $.ajax({
+	      url: "/api/tracks",
+	      success: function (tracks) {
+	        TrackActions.setTracks(tracks);
+	      }
+	    });
+	  },
+	
+	  save: function (data) {
+	    $.ajax({
+	      url: "/api/tracks",
+	      data: { track: data },
+	      method: 'POST',
+	      success: function (trackData) {
+	        TrackActions.addTrack(trackData);
+	      }
+	    });
+	  },
+	
+	  destroy: function (id) {
+	    $.ajax({
+	      url: "/api/tracks/" + id,
+	      method: 'DELETE',
+	      success: function (track) {
+	        TrackActions.removeTrack(track);
+	      }
+	    });
+	  }
+	};
 
 /***/ }
 /******/ ]);

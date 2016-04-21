@@ -1,5 +1,6 @@
 var React = require('react'),
-    TrackActions = require('../actions/TrackActions');
+    TrackActions = require('../actions/TrackActions'),
+    TrackApiUtil = require('../util/TrackApiUtil');
 
 var TrackForm = React.createClass({
   getInitialState: function() {
@@ -9,7 +10,7 @@ var TrackForm = React.createClass({
   handleSave: function (event) {
     event.preventDefault();
     this.props.track.name = this.state.name;
-    TrackActions.addTrack(this.props.track);
+    TrackApiUtil.save(this.props.track);
     this.resetState();
     this.props.reset();
   },

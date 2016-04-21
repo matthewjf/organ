@@ -3,21 +3,34 @@ var KeyActions = require('../actions/KeyActions');
 var Track = function (attrs) {
   this.name = attrs.name;
   this.roll = (attrs.roll ? attrs.roll : []);
+  this.id = attrs.id;
 };
+
+// Track.prototype.makeRoll = function (obj) {
+//   var result = [];
+//   debugger;
+//   for (var i = 0; i < Object.keys(obj).length; i++) {
+//     if (!obj[i].notes) {obj[i].notes = [];}
+//     result.push(obj[i]);
+//   }
+//   return result;
+// };
 
 Track.prototype.startRecording = function () {
   this.startTime = Date.now();
   this.roll = [];
 };
 
+Track.prototype.stopRecording = function () {
+  var elapsed = Date.now() - this.startTime;
+  var slice = {timeSlice: elapsed, notes: []};
+  this.roll.push(slice);
+};
+
 Track.prototype.addNotes = function (notes) {
   var elapsed = Date.now() - this.startTime;
   var slice = {timeSlice: elapsed, notes: notes};
   this.roll.push(slice);
-};
-
-Track.prototype.stopRecording = function () {
-  this.addNotes([]);
 };
 
 Track.prototype.play = function () {
