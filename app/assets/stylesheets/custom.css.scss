@@ -18,6 +18,7 @@ $amount: 8%;
 }
 
 body {
+  font-size: 16px;
   font-family: sans-serif;
   color: hsl(0, 0%, 28%);
   background-color: hsl(0,0,88%);
@@ -26,6 +27,7 @@ body {
 li {
   list-style: none;
   padding: 10px;
+
 }
 
 ul {
@@ -37,6 +39,13 @@ h1 {
 }
 
 .trackPlayer {
+  display: flex;
+  .trackName {
+    vertical-align: middle;
+    padding-top: 6px;
+    padding-bottom: 6px;
+    width: 100%;
+  }
   button {
     float: right;
   }
