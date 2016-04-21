@@ -27526,15 +27526,15 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn btn-danger',
-	          onClick: this.handleDelete },
-	        'delete'
-	      ),
-	      React.createElement(
-	        'button',
 	        { className: 'btn btn-primary',
 	          onClick: this.handlePlay },
 	        'play'
+	      ),
+	      React.createElement(
+	        'button',
+	        { className: 'btn btn-danger',
+	          onClick: this.handleDelete },
+	        'delete'
 	      )
 	    );
 	  }
