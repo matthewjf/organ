@@ -27,14 +27,14 @@ var JukeBox = React.createClass({
   render: function () {
     var tracks = this.state.tracks.map(function(track){
       return (
-        <li key={track.id}>
+        <li className='clearfix' key={track.id}>
           <TrackPlayer key={track.id} track={track} />
         </li>
       );
     });
 
     return (
-      <div>
+      <div className='jukebox'>
         <h2>JukeBox</h2>
         <ul>
           {tracks}

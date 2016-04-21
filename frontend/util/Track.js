@@ -6,16 +6,6 @@ var Track = function (attrs) {
   this.id = attrs.id;
 };
 
-// Track.prototype.makeRoll = function (obj) {
-//   var result = [];
-//   debugger;
-//   for (var i = 0; i < Object.keys(obj).length; i++) {
-//     if (!obj[i].notes) {obj[i].notes = [];}
-//     result.push(obj[i]);
-//   }
-//   return result;
-// };
-
 Track.prototype.startRecording = function () {
   this.startTime = Date.now();
   this.roll = [];

@@ -35,7 +35,7 @@ var OrganKey = React.createClass({
     var classes = classNames({
       'key': true,
       'pressed': this.state.pressed,
-      'sharp': this.props.noteName.endsWith('S'),
+      'sharp': this.props.noteName.endsWith('S')
     });
 
     return (

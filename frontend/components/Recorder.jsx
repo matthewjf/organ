@@ -47,24 +47,40 @@ var Recorder = React.createClass({
 
   render: function () {
 
-    // var saveClasses = classNames({
-    //   'btn': true,
-    //   'disabled': Boolean(this.state.track.roll.length)
-    // });
-    //
-    // var playClasses = classNames({
-    //   'btn': true,
-    //   'disabled': Boolean(this.state.track.roll.length)
-    // });
+    var playClasses = classNames({
+      'btn': true,
+      'btn-success': true,
+      'disabled': this.state.track.roll.length < 1
+    });
+
+    var startClasses = classNames({
+      'btn': true,
+      'btn-primary': true,
+      'disabled': this.state.isRecording
+    });
+
+    var stopClasses = classNames({
+      'btn': true,
+      'btn-primary': true,
+      'disabled': !this.state.isRecording
+    });
+
+    var startText = (this.state.isRecording ? 'recording' : 'start');
+    var disableSave = this.state.track.roll.length < 1;
 
     return (
-      <section>
+      <section className='recorder'>
         <h2>Recording</h2>
-        <button className='btn' onClick={this.handleStart}>start</button>
-        <button className='btn' onClick={this.handleStop}>stop</button>
-        <button className='btn' onClick={this.handlePlay}>play</button>
+        <button className={startClasses}
+          onClick={this.handleStart}>{startText}</button>
+        <button className={stopClasses}
+          onClick={this.handleStop}>stop</button>
+        <button className={playClasses} onClick={this.handlePlay}>play</button>
 
-        <TrackForm track={this.state.track} reset={this.resetState}/>
+        <TrackForm
+          track={this.state.track}
+          reset={this.resetState}
+          disable={disableSave}/>
       </section>
     );
   }

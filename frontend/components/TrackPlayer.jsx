@@ -19,8 +19,10 @@ var TrackPlayer = React.createClass({
     return (
       <div className='trackPlayer'>
         <span className='trackName'>{track.name}</span>
-        <button className='btn' onClick={this.handlePlay}>play</button>
-        <button className='btn' onClick={this.handleDelete}>delete</button>
+        <button className='btn btn-danger'
+          onClick={this.handleDelete}>delete</button>
+        <button className='btn btn-primary'
+          onClick={this.handlePlay}>play</button>
       </div>
     );
   }

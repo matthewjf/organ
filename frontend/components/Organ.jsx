@@ -13,7 +13,7 @@ var Organ = React.createClass ({
 
   render: function() {
     return (
-      <div>
+      <div className='main'>
         <h1>Piano</h1>
         <div className='organ'>
           {this.organKeys()}

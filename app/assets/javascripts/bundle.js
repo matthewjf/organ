@@ -27033,7 +27033,7 @@
 	  render: function () {
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'main' },
 	      React.createElement(
 	        'h1',
 	        null,
@@ -27165,19 +27165,30 @@
 	
 	  render: function () {
 	
-	    // var saveClasses = classNames({
-	    //   'btn': true,
-	    //   'disabled': Boolean(this.state.track.roll.length)
-	    // });
-	    //
-	    // var playClasses = classNames({
-	    //   'btn': true,
-	    //   'disabled': Boolean(this.state.track.roll.length)
-	    // });
+	    var playClasses = classNames({
+	      'btn': true,
+	      'btn-success': true,
+	      'disabled': this.state.track.roll.length < 1
+	    });
+	
+	    var startClasses = classNames({
+	      'btn': true,
+	      'btn-primary': true,
+	      'disabled': this.state.isRecording
+	    });
+	
+	    var stopClasses = classNames({
+	      'btn': true,
+	      'btn-primary': true,
+	      'disabled': !this.state.isRecording
+	    });
+	
+	    var startText = this.state.isRecording ? 'recording' : 'start';
+	    var disableSave = this.state.track.roll.length < 1;
 	
 	    return React.createElement(
 	      'section',
-	      null,
+	      { className: 'recorder' },
 	      React.createElement(
 	        'h2',
 	        null,
@@ -27185,20 +27196,25 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn', onClick: this.handleStart },
-	        'start'
+	        { className: startClasses,
+	          onClick: this.handleStart },
+	        startText
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn', onClick: this.handleStop },
+	        { className: stopClasses,
+	          onClick: this.handleStop },
 	        'stop'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn', onClick: this.handlePlay },
+	        { className: playClasses, onClick: this.handlePlay },
 	        'play'
 	      ),
-	      React.createElement(TrackForm, { track: this.state.track, reset: this.resetState })
+	      React.createElement(TrackForm, {
+	        track: this.state.track,
+	        reset: this.resetState,
+	        disable: disableSave })
 	    );
 	  }
 	
@@ -27217,16 +27233,6 @@
 	  this.roll = attrs.roll ? attrs.roll : [];
 	  this.id = attrs.id;
 	};
-	
-	// Track.prototype.makeRoll = function (obj) {
-	//   var result = [];
-	//   debugger;
-	//   for (var i = 0; i < Object.keys(obj).length; i++) {
-	//     if (!obj[i].notes) {obj[i].notes = [];}
-	//     result.push(obj[i]);
-	//   }
-	//   return result;
-	// };
 	
 	Track.prototype.startRecording = function () {
 	  this.startTime = Date.now();
@@ -27395,14 +27401,14 @@
 	    var tracks = this.state.tracks.map(function (track) {
 	      return React.createElement(
 	        'li',
-	        { key: track.id },
+	        { className: 'clearfix', key: track.id },
 	        React.createElement(TrackPlayer, { key: track.id, track: track })
 	      );
 	    });
 	
 	    return React.createElement(
 	      'div',
-	      null,
+	      { className: 'jukebox' },
 	      React.createElement(
 	        'h2',
 	        null,
@@ -27454,13 +27460,15 @@
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn', onClick: this.handlePlay },
-	        'play'
+	        { className: 'btn btn-danger',
+	          onClick: this.handleDelete },
+	        'delete'
 	      ),
 	      React.createElement(
 	        'button',
-	        { className: 'btn', onClick: this.handleDelete },
-	        'delete'
+	        { className: 'btn btn-primary',
+	          onClick: this.handlePlay },
+	        'play'
 	      )
 	    );
 	  }
@@ -27474,6 +27482,7 @@
 
 	var React = __webpack_require__(165),
 	    TrackActions = __webpack_require__(199),
+	    classNames = __webpack_require__(195),
 	    TrackApiUtil = __webpack_require__(203);
 	
 	var TrackForm = React.createClass({
@@ -27501,20 +27510,29 @@
 	  },
 	
 	  render: function () {
-	    return React.createElement(
-	      'form',
-	      { onSubmit: this.handleSave },
-	      React.createElement(
-	        'label',
-	        null,
-	        'name',
-	        React.createElement('input', {
-	          type: 'text',
-	          value: this.state.name,
-	          onChange: this.updateName })
-	      ),
-	      React.createElement('input', { type: 'submit', value: 'save', className: 'btn' })
-	    );
+	    if (this.props.track.roll.length > 0) {
+	      return React.createElement(
+	        'form',
+	        { onSubmit: this.handleSave },
+	        React.createElement(
+	          'fieldset',
+	          { className: 'form-group' },
+	          React.createElement(
+	            'label',
+	            null,
+	            'name',
+	            React.createElement('input', {
+	              type: 'text',
+	              value: this.state.name,
+	              onChange: this.updateName,
+	              className: 'form-control' })
+	          )
+	        ),
+	        React.createElement('input', { type: 'submit', value: 'save', className: 'btn btn-primary' })
+	      );
+	    } else {
+	      return React.createElement('div', null);
+	    }
 	  }
 	});
 	

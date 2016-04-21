@@ -1,5 +1,6 @@
 var React = require('react'),
     TrackActions = require('../actions/TrackActions'),
+    classNames = require('classnames'),
     TrackApiUtil = require('../util/TrackApiUtil');
 
 var TrackForm = React.createClass({
@@ -25,17 +26,25 @@ var TrackForm = React.createClass({
   },
 
   render: function() {
-    return (
-      <form onSubmit={this.handleSave}>
-        <label>name
-          <input
-            type='text'
-            value={this.state.name}
-            onChange={this.updateName} />
-        </label>
-        <input type='submit' value='save' className='btn' />
-      </form>
-    );
+    if (this.props.track.roll.length > 0) {
+      return (
+        <form onSubmit={this.handleSave}>
+          <fieldset className='form-group'>
+            <label>name
+              <input
+                type='text'
+                value={this.state.name}
+                onChange={this.updateName}
+                className='form-control' />
+            </label>
+          </fieldset>
+
+          <input type='submit' value='save' className='btn btn-primary' />
+        </form>
+      );
+    } else {
+      return <div></div>;
+    }
   }
 });
 
